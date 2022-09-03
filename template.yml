@@ -51,8 +51,7 @@ Resources:
                 requestParameters:
                   integration.request.path.ip: "context.identity.sourceIp"
                   integration.request.header.customheader: "method.request.header.customheader"
-                  integration.request.querystring.token: "method.request.querystring.token"
-                  integration.request.header.authtoken: "method.request.querystring.token"
+                  integration.request.header.token: "method.request.querystring.token"
                   integration.request.header.Content-Type: "'application/json'"
                 passthroughBehavior: "when_no_match"
                 type: "http"
