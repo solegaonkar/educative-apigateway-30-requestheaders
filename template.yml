@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Parameters:
+  DeployId:
+    Type: String
+    Default: afsf34sfdg
+  SourceCodeBucket:
+    Type: String
+    Default: afsf34sfdg
+Resources:
+  RestAPI:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      Body:
+        openapi: "3.0.1"
+        info:
+          title: "EducativeRestAPI"
+          description: "Rest API for Educative API Gateway Course"
+          version: "2022-06-06T10:08:49Z"
+        paths:
+          /:
+            get:
+              parameters:
+                - name: "token"
+                  in: "query"
+                  required: true
+                  schema:
+                    type: "string"
+                - name: "customheader"
+                  in: "header"
+                  required: true
+                  schema:
+                    type: "string"
+              responses:
+                "200":
+                  description: "200 response"
+                  content:
+                    application/json:
+                      schema:
+                        $ref: "#/components/schemas/Empty"
+              x-amazon-apigateway-request-validator: "Validate query string parameters and\
+                \ headers"
+              x-amazon-apigateway-integration:
+                httpMethod: "POST"
+                uri: "https://public.krazyminds.com/headers"
+                responses:
+                  default:
+                    statusCode: "200"
+                requestParameters:
+                  integration.request.path.ip: "context.identity.sourceIp"
+                  integration.request.header.customheader: "method.request.header.customheader"
+                  integration.request.querystring.token: "method.request.querystring.token"
+                  integration.request.header.authtoken: "method.request.querystring.token"
+                  integration.request.header.Content-Type: "'application/json'"
+                passthroughBehavior: "when_no_match"
+                type: "http"
+        components:
+          schemas:
+            Empty:
+              title: "Empty Schema"
+              type: "object"
+      Name: EducativeRestAPI
+      Description: "Rest API for Educative API Gateway Course"
+      Mode: overwrite
+  APIDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: RestAPI
+      StageName: v1
