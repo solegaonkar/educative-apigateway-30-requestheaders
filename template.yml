@@ -40,8 +40,7 @@ Resources:
                     application/json:
                       schema:
                         $ref: "#/components/schemas/Empty"
-              x-amazon-apigateway-request-validator: "Validate query string parameters and\
-                \ headers"
+              x-amazon-apigateway-request-validator: "Validate query string parameters and headers"
               x-amazon-apigateway-integration:
                 httpMethod: "POST"
                 uri: "https://public.krazyminds.com/headers"
